@@ -1,0 +1,37 @@
+male(prince_charles).
+male(prince_andrew).
+male(prince_edward).
+female(princess_ann).
+female(queen_elizabeth).
+
+offspring(queen_elizabeth,prince_charles).
+offspring(queen_elizabeth,princess_ann).
+offspring(queen_elizabeth,prince_andrew).
+offspring(queen_elizabeth,prince_edward).
+
+older(prince_charles,princess_ann).
+older(princess_ann,prince_andrew).
+older(prince_andrew,prince_edward).
+check_older(X,Y):-
+    older(X,Y);
+    older(X,Z),
+    check_older(Z,Y).
+
+precedes(X,Y):-
+	male(X),
+	male(Y),
+	check_older(X,Y);
+	female(X),
+	male(Y),
+	check_older(X,Y).
+
+
+insert(A,[B|C],[B|D]):-
+	not(check_older(A,B)),!,insert(A,C,D).
+insert(A,C,[A|C]).
+succession_sort([A|B],SortList):-
+	succession_sort(B,Tail),
+	insert(A,Tail,SortList).
+succession_sort([],[]).
+
+
