@@ -9,8 +9,6 @@ healthy_sauces([honey_mustard, yelow_mustard, deli_brown_mustard, sweet_onion]).
 sides([chips, cookies, hashbrowns, energy_bar_and_fruit_crisps, yogurt]). 
 drinks([fountain_drinks, dasani_mineral_water, minute_maid_puly_orange_juice, ayataka_japanese_green_tea, coffee, tea]).
 salads([cold_cut_trio, chicken_and_bacon_ranch, chicken_teriyaki, egg_mayo, chicken_ham, italian_bmt, meatball_marinara_melt, roast_beef, veggie_party]).
-healthy([italian_wheat, hearty_italian, sourdough]).
-vegan([italian_wheat, hearty_italian, sourdough]).
 
 print_options([]). % empty list
 print_options([H]) :- 
@@ -106,137 +104,158 @@ selected(X,drinks):-
 selected(X,salads):-
     assert(salad(X)), write(X),nl.
 
-query_bread:-
+query(bread):-
     print("Please choose your bread type:"),
     options(breads),nl,
     read(X),
     check_selection(X,breads) -> selected(X,breads);
         write("wrong_selection"),nl,
-        query_bread.
+        query(bread).
 
-query_cheese:-
+query(cheese):-
     print("Please choose your type of cheese:"),
     options(cheeses),nl,
     read(X),
     check_selection(X,cheeses) -> selected(X,cheeses);
         write("wrong_selection"),nl,
-        query_cheese.
+        query(cheese).
 
-query_drink:-
+query(drink):-
     print("Please choose your drink:"),
     options(drinks),nl,
     read(X),
     check_selection(X,drinks) -> selected(X,drinks);
         write("wrong_selection"),nl,
-        query_drink.
+        query(drink).
 
-query_meat:-
+query(meat):-
     print("Please choose the meats you want one by one(0 to end):"),
     options(meats),nl,
     read(X),
     not(X==0) -> 
         (check_selection(X,meats) -> selected(X,meats);
             write("wrong_selection"),nl),
-        query_meat;
+        query(meat);
         true.
 
-query_veg :-
+query(veg) :-
     print("Please choose the vegetables you want one by one(0 to end):"),
     options(vegs),nl,
     read(X),
     not(X==0) -> 
         ( check_selection(X, vegs) -> selected(X,vegs); 
             write("wrong_selection"),nl ),      
-        query_veg;
+        query(veg);
         true.
 
-query_healthy_sauce:-
+query(healthy_sauce):-
     print("Please choose the type of sauces you want one by one(0 to end):"),
     options(healthy_sauces),nl,
     read(X),
     not(X==0) -> 
         ( check_selection(X,healthy_sauces) -> selected(X,sauces);
             write("wrong_selection"),nl),
-        query_healthy_sauce;
+        query(healthy_sauce);
         true.
 
-query_vegan_sauce:-
+query(vegan_sauce):-
     print("Please choose the type of sauces you want one by one(0 to end):"),
     options(vegan_sauces),nl,
     read(X),
     not(X==0) -> 
         ( check_selection(X, vegan_sauces) -> selected(X,sauces); 
             write("wrong_selection"),nl ),      
-        query_vegan_sauce;
+        query(vegan_sauce);
         true.
 
-query_sauce:-
+query(sauce):-
     print("Please choose the type of sauces you want one by one(0 to end):"),
     options(sauces),nl,
     read(X),
     not(X==0) -> 
         ( check_selection(X, sauces) -> selected(X,sauces); 
             write("wrong_selection"),nl ),      
-        query_sauce;
+        query(sauce);
         true.
 
-query_side:-
+query(side):-
     print("Please choose the sides you want one by one(0 to end):"),
     options(sides),nl,
     read(X),
     not(X==0) -> 
         ( check_selection(X, sides) -> selected(X,sides); 
             write("wrong_selection"),nl ),      
-        query_side;
+        query(side);
         true.
 
-query_salad:-
+query(salad):-
     print("Please choose the salads you want one by one(0 to end):"),
     options(salads),nl,
     read(X),
     not(X==0) -> 
         ( check_selection(X, salads) -> selected(X,salads); 
             write("wrong_selection"),nl ),      
-        query_salad;
+        query(salad);
         true.
 
 % Declare dynamic predicates to store results
 :- dynamic bread/1, meat/1, veg/1, sauce/1, side/1, drink/1, cheese/1, salad/1, meal_type/1.
 
-meal_normal:-
-    query_bread, query_meat, query_veg, query_cheese, query_sauce, query_side, query_drink.
-meal_veggie:-
-    query_bread, query_veg, query_cheese, query_sauce, query_side, query_drink.
-meal_vegan:-
-    query_bread, query_veg, query_vegan_sauce, query_side, query_drink.
-meal_healthy:-
-    query_bread, query_veg, query_healthy_sauce.
-meal_value :-
-    query_bread, query_meat, query_veg, query_cheese, query_sauce.
-meal_salad:-
-    query_salad, query_side, query_drink.
+meal(normal):-
+    query(bread), query(meat), query(veg), query(cheese), query(sauce), query(side), query(drink).
+meal(veggie):-
+    query(bread), query(veg), query(cheese), query(sauce), query(side), query(drink).
+meal(vegan):-
+    query(bread), query(veg), query(vegan_sauce), query(side), query(drink).
+meal(healthy):-
+    query(bread), query(veg), query(healthy_sauce).
+meal(value) :-
+    query(bread), query(meat), query(veg), query(cheese), query(sauce).
+meal(salad):-
+    query(salad), query(side), query(drink).
 
 start_choose:-
     write("Choose meal type:(normal, veggie, vegan, healthy, value, salad)"),nl,
     read(Type),
-    Type== veggie -> 
+    (Type== veggie -> 
         write("meal type ="), write(Type),nl, 
-        meal_veggie, assert(meal_type(veggie));
+        meal(veggie), assert(meal_type(veggie));
     Type== vegan ->
         write("meal type ="), write(Type),nl, 
-        meal_vegan, assert(meal_type(vegan));
+        meal(vegan), assert(meal_type(vegan));
     Type== healthy ->
         write("meal type ="), write(Type),nl, 
-        meal_healthy, assert(meal_type(healthy));
+        meal(healthy), assert(meal_type(healthy));
     Type== value ->
         write("meal type ="), write(Type),nl, 
-        meal_value, assert(meal_type(value));
+        meal(value), assert(meal_type(value));
     Type== normal ->    
         write("meal type ="), write(Type),nl, 
-        meal_normal, assert(meal_type(normal));
+        meal(normal), assert(meal_type(normal));
     Type== salad ->
         write("meal type ="), write(Type),nl, 
-        meal_salad, assert(meal_type(meal_salad));
+        meal(salad), assert(meal_type(meal(salad)));
     write("invalid option selected!"),nl,
-    start_choose.
+    start_choose),
+    display.
 
+display:- 
+    meal_type(Meal),
+    write("Meal type selected: "), write(Meal), nl,
+    write("Choices selected:"),nl,
+    findall(X, bread(X), Breads), atomic_list_concat(Breads, ',',Bread),
+    write("Bread selected:"),write(Bread),nl,
+    findall(X, meat(X), Meats), atomic_list_concat(Meats, ',',Meat),
+    write("Meats selected:"),write(Meat),nl,
+    findall(X, cheese(X), Cheeses), atomic_list_concat(Cheeses, ',',Cheese),
+    write("Cheese selected:"),write(Cheese),nl,
+    findall(X, veg(X), Vegs), atomic_list_concat(Vegs, ',',Veg),
+    write("Vegetables selected:"),write(Veg),nl,
+    findall(X, sauce(X), Sauces), atomic_list_concat(Sauces, ',',Sauce),
+    write("Sauces selected:"),write(Sauce),nl,
+    findall(X, side(X), Sides), atomic_list_concat(Sides, ',',Side),
+    write("Sides selected:"),write(Side),nl,
+    findall(X, salad(X), Salads), atomic_list_concat(Salads, ',',Salad),
+    write("Salads selected:"),write(Salad),nl,
+    findall(X, drink(X), Drinks), atomic_list_concat(Drinks, ',',Drink),
+    write("Drink selected:"),write(Drink),nl.
