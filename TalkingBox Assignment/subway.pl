@@ -1,4 +1,4 @@
-% Declare facts of available options
+% Declare facts of available options, based on the subway official website
 breads([italian_wheat, hearty_italian, honey_oat, parmesan_oregano, flatbread, multigrain]).
 meats([ turkey_breast, ham, chicken_breast, roast_beef, tuna, turkey_salami, beefsteak, bacon, meatballs, pepperoni]).
 cheeses([processed_cheddar, monterey_cheddar, none]).
@@ -10,98 +10,103 @@ sides([chips, cookies, hashbrowns, energy_bar_and_fruit_crisps, yogurt]).
 drinks([fountain_drinks, dasani_mineral_water, minute_maid_puly_orange_juice, ayataka_japanese_green_tea, coffee, tea]).
 salads([cold_cut_trio, chicken_and_bacon_ranch, chicken_teriyaki, egg_mayo, chicken_ham, italian_bmt, meatball_marinara_melt, roast_beef, veggie_party]).
 
+% print_options is used to print the items based on the given list.
 print_options([]). % empty list
-print_options([H]) :- 
+print_options([H]) :- % last item in list
     write(H), 
-    write('.'). % last item in list
+    write('.'). 
 
-print_options([H|T]) :- 
+print_options([H|T]) :-  % List with items more than one
     write(H), 
     write(', '), 
-    print_options(T), !. % list 
+    print_options(T), !.% remove the item then print it one by one
 
-options(breads):-
-    breads(L), print_options(L).
+% options is used to choose the list based on the arguments given and call the print list command
+options(breads):- % Print options for breads
+    breads(L), print_options(L). % Get the list and then call the print function with the respective list
 
-options(meats):-
-    meats(L), print_options(L).
+options(meats):- % Functionally the same as above but for meats
+    meats(L), print_options(L). 
 
-options(cheeses):-
+options(cheeses):- % Functionally the same as above but for cheeses
     cheeses(L), print_options(L).
 
-options(vegs):-
+options(vegs):- % Functionally the same as above but for vegetables
     vegs(L), print_options(L).
 
-options(sauces):-
+options(sauces):- % Functionally the same as above but for sauces
     sauces(L), print_options(L).
 
-options(vegan_sauces):-
+options(vegan_sauces):- % Functionally the same as above but for vegan sauces
     vegan_sauces(L),print_options(L).
 
-options(healthy_sauces):-
+options(healthy_sauces):- % Functionally the same as above but for healthy sauces
     healthy_sauces(L),print_options(L).
 
-options(sides):-
+options(sides):- % Functionally the same as above but for sides
     sides(L), print_options(L).
 
-options(drinks):-
+options(drinks):- % Functionally the same as above but for drinks
     drinks(L), print_options(L).
 
-options(salads):-
+options(salads):- % Functionally the same as above but for salads
     salads(L), print_options(L).
 
-check_selection(X, breads):-
-    breads(L), member(X,L),!.
+% Check selection is used to check whether the given input is inside the list of fact specified
+% '!' is used to cut the backtracking and return right away when the 
+check_selection(X, breads):- % Check X is in list of breads
+    breads(L), member(X,L),!. % For the given list, check whether element is in a list
 
-check_selection(X, meats):-
+check_selection(X, meats):- % Check X is in list of meats
     meats(L), member(X,L),!.
 
-check_selection(X, cheeses):-
+check_selection(X, cheeses):- % Check X is in list of cheeses
     cheeses(L), member(X,L),!.
 
-check_selection(X, vegs):-
+check_selection(X, vegs):- % Check X is in list of vegetables
     vegs(L), member(X,L),!.
 
-check_selection(X, vegan_sauces):-
+check_selection(X, vegan_sauces):- % Check X is in list of vegan sauces
     vegan_sauces(L), member(X,L),!.
 
-check_selection(X, healthy_sauces):-
+check_selection(X, healthy_sauces):- % Check X is in list of healthy sauces
     healthy_sauces(L), member(X,L),!.
 
-check_selection(X, sauces):-
+check_selection(X, sauces):- % Check X is in list of sauces
     sauces(L), member(X,L),!.
 
-check_selection(X, sides):-
+check_selection(X, sides):- % Check X is in list of sides
     sides(L), member(X,L),!.
 
-check_selection(X, drinks):-
+check_selection(X, drinks):- % Check X is in list of drinks
     drinks(L), member(X,L),!.
 
-check_selection(X,salads):-
+check_selection(X,salads):- % Check X is in list of salads
     salads(L), member(X,L),!.
 
-selected(X,breads):-
+% Selected is used to assert the facts given the item argument(X) and the specific list of fact
+selected(X,breads):- % assert a bread fact from the given argument and print the value
     assert(bread(X)), write(X),nl.
 
-selected(X,meats):-
+selected(X,meats):- % assert a meat fact from the given argument and print the value
     assert(meat(X)), write(X),nl.
 
-selected(X,cheeses):-
+selected(X,cheeses):- % assert a cheese fact from the given argument and print the value
     assert(cheese(X)), write(X),nl.
 
-selected(X,vegs):-
+selected(X,vegs):- % assert a vegetable fact from the given argument and print the value
     assert(veg(X)), write(X),nl.
 
-selected(X,sauces):-
+selected(X,sauces):- % assert a sauce fact from the given argument and print the value
     assert(sauce(X)), write(X),nl.
 
-selected(X,sides):-
+selected(X,sides):- % assert a side fact from the given argument and print the value
     assert(side(X)), write(X),nl.
 
-selected(X,drinks):-
+selected(X,drinks):- % assert a drink fact from the given argument and print the value
     assert(drink(X)), write(X),nl.
 
-selected(X,salads):-
+selected(X,salads):- % assert a salad fact from the given argument and print the value
     assert(salad(X)), write(X),nl.
 
 query(bread):-
