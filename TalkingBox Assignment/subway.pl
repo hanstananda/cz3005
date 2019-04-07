@@ -240,43 +240,47 @@ query(salad):- % Get the type of salads selected by the user
 % Declare dynamic predicates to store results
 :- dynamic bread/1, meat/1, veg/1, sauce/1, side/1, drink/1, cheese/1, salad/1, meal_type/1.
 
-meal(normal):-
+% This predicate is used to intelligently choose the appropriate queries for the user
+meal(normal):- % Normal meal will show the query of all options except salad
     query(bread), query(meat), query(veg), query(cheese), query(sauce), query(side), query(drink).
-meal(veggie):-
+meal(veggie):- % Veggie meal will remove the meats options from the normal meal
     query(bread), query(veg), query(cheese), query(sauce), query(side), query(drink).
-meal(vegan):-
+meal(vegan):- % Vegan meal will not ask cheese and meats options and query only vegan sauces
     query(bread), query(veg), query(vegan_sauce), query(side), query(drink).
-meal(healthy):-
-    query(bread), query(veg), query(healthy_sauce).
-meal(value) :-
+meal(healthy):- % Healthy meal will only query for healty sauces and not ask for sides
+    query(bread), query(meat), query(veg), query(healthy_sauce), query(drink).
+meal(value) :- % Value meal will not query on sides and drinks
     query(bread), query(meat), query(veg), query(cheese), query(sauce).
-meal(salad):-
+meal(salad):- % Salad meal will only query salad options
     query(salad), query(side), query(drink).
 
-start_choose:-
+start_choose:- % Start the program
+    preprint,
     write("Choose meal type:(normal, veggie, vegan, healthy, value, salad)"),nl,
     read(Type),
-    (Type== veggie -> 
-        write("meal type ="), write(Type),nl, 
-        meal(veggie), assert(meal_type(veggie));
-    Type== vegan ->
-        write("meal type ="), write(Type),nl, 
+    (Type== veggie -> % Given input is veggie, call the queries for veggie meal and assert meal_type to veggie
+        write("meal type :"), write(Type),nl, 
+        meal(veggie), assert(meal_type(veggie)); 
+    Type== vegan -> % Given input is vegan, call the queries for vegan meal and assert meal_type to vegan
+        write("meal type :"), write(Type),nl, 
         meal(vegan), assert(meal_type(vegan));
-    Type== healthy ->
-        write("meal type ="), write(Type),nl, 
+    Type== healthy -> % Given input is healthy, call the queries for healthy  meal and assert meal_type to healthy
+        write("meal type :"), write(Type),nl, 
         meal(healthy), assert(meal_type(healthy));
-    Type== value ->
-        write("meal type ="), write(Type),nl, 
+    Type== value -> % Given input is value, call the queries for value meal and assert meal_type to value
+        write("meal type :"), write(Type),nl, 
         meal(value), assert(meal_type(value));
-    Type== normal ->    
-        write("meal type ="), write(Type),nl, 
+    Type== normal -> % Given input is normal, call the queries for normal meal and assert meal_type to normal   
+        write("meal type :"), write(Type),nl, 
         meal(normal), assert(meal_type(normal));
-    Type== salad ->
-        write("meal type ="), write(Type),nl, 
+    Type== salad -> % Given input is salad, call the queries for salad meal and assert meal_type to salad 
+        write("meal type :"), write(Type),nl, 
         meal(salad), assert(meal_type(meal(salad)));
     write("invalid option selected!"),nl,
-    start_choose),
-    display.
+    start_choose), % Loops back to query the user again about the type if it is not in the list
+    display,
+    postprint,
+    reset.
 
 display:- 
     meal_type(Meal),
@@ -291,3 +295,18 @@ display:-
     print_selected(salads),
     print_selected(drinks).
 
+preprint:-
+    write("===========================================================").
+
+postprint:-
+    write("===========================================================").
+
+reset:- retractall(bread(_)).
+reset:- retractall(meat(_)).
+reset:- retractall(veg(_)).
+reset:- retractall(sauce(_)).
+reset:- retractall(salad(_)).
+reset:- retractall(cheese(_)).
+reset:- retractall(side(_)).
+reset:- retractall(drink(_)).
+reset:- retractall(meal_type(_)).
