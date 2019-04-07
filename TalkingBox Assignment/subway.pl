@@ -86,38 +86,72 @@ check_selection(X,salads):- % Check X is in list of salads
 
 % Selected is used to assert the facts given the item argument(X) and the specific list of fact
 selected(X,breads):- % assert a bread fact from the given argument and print the value
-    assert(bread(X)), write(X),nl.
+    assert(bread(X)), print_selected(breads).
 
 selected(X,meats):- % assert a meat fact from the given argument and print the value
-    assert(meat(X)), write(X),nl.
+    assert(meat(X)), print_selected(meats).
 
 selected(X,cheeses):- % assert a cheese fact from the given argument and print the value
-    assert(cheese(X)), write(X),nl.
+    assert(cheese(X)), print_selected(cheeses).
 
 selected(X,vegs):- % assert a vegetable fact from the given argument and print the value
-    assert(veg(X)), write(X),nl.
+    assert(veg(X)), print_selected(vegetables).
 
 selected(X,sauces):- % assert a sauce fact from the given argument and print the value
-    assert(sauce(X)), write(X),nl.
+    assert(sauce(X)), print_selected(sauces).
 
 selected(X,sides):- % assert a side fact from the given argument and print the value
-    assert(side(X)), write(X),nl.
+    assert(side(X)),print_selected(sides).
 
 selected(X,drinks):- % assert a drink fact from the given argument and print the value
-    assert(drink(X)), write(X),nl.
+    assert(drink(X)), print_selected(drinks).
 
 selected(X,salads):- % assert a salad fact from the given argument and print the value
-    assert(salad(X)), write(X),nl.
+    assert(salad(X)), print_selected(salads).
 
-query(bread):-
+% Print selected is used to find asserted items of a specific list and then print them.
+print_selected(breads):- % print the asserted breads 
+    findall(X, bread(X), Breads), atomic_list_concat(Breads, ',',Bread), % Find the items and concat it into one string
+    write("Bread selected: "),write(Bread),write("."),nl. % Print the items
+
+print_selected(meats):- % print the asserted meats 
+    findall(X, meat(X), Meats), atomic_list_concat(Meats, ',',Meat),
+    write("Meats selected: "),write(Meat),write("."),nl.
+
+print_selected(cheeses):- % print the asserted cheeses 
+    findall(X, cheese(X), Cheeses), atomic_list_concat(Cheeses, ',',Cheese),
+    write("Cheese selected: "),write(Cheese),write("."),nl.
+
+print_selected(vegetables):- % print the asserted vegetables 
+    findall(X, veg(X), Vegs), atomic_list_concat(Vegs, ',',Veg),
+    write("Vegetables selected: "),write(Veg),write("."),nl.
+
+print_selected(sauces):- % print the asserted sauces 
+    findall(X, sauce(X), Sauces), atomic_list_concat(Sauces, ',',Sauce),
+    write("Sauces selected: "),write(Sauce),write("."),nl.
+
+print_selected(sides):- % print the asserted sides
+    findall(X, side(X), Sides), atomic_list_concat(Sides, ',',Side),
+    write("Sides selected: "),write(Side),write("."),nl.
+
+print_selected(salads):- % print the asserted salads 
+    findall(X, salad(X), Salads), atomic_list_concat(Salads, ',',Salad),
+    write("Salads selected: "),write(Salad),write("."),nl.
+
+print_selected(drinks):- % print the asserted drinks
+    findall(X, drink(X), Drinks), atomic_list_concat(Drinks, ',',Drink),
+    write("Drink selected: "),write(Drink),write("."),nl.
+
+% Query is used to get the user inputs for each of the options 
+query(bread):- % Get the type of bread selected by the user
     print("Please choose your bread type:"),
     options(breads),nl,
     read(X),
-    check_selection(X,breads) -> selected(X,breads);
-        write("wrong_selection"),nl,
-        query(bread).
+    check_selection(X,breads) -> selected(X,breads); % If the input given is valid, then assert the fact
+        write("wrong_selection"),nl, 
+        query(bread). % The input is invalid, thus it loops back to query the user again
 
-query(cheese):-
+query(cheese):- % Get the type of cheese selected by the user
     print("Please choose your type of cheese:"),
     options(cheeses),nl,
     read(X),
@@ -125,7 +159,7 @@ query(cheese):-
         write("wrong_selection"),nl,
         query(cheese).
 
-query(drink):-
+query(drink):- % Get the type of drink selected by the user
     print("Please choose your drink:"),
     options(drinks),nl,
     read(X),
@@ -133,15 +167,15 @@ query(drink):-
         write("wrong_selection"),nl,
         query(drink).
 
-query(meat):-
+query(meat):- % Get the type of meats selected by the user
     print("Please choose the meats you want one by one(0 to end):"),
     options(meats),nl,
     read(X),
     not(X==0) -> 
-        (check_selection(X,meats) -> selected(X,meats);
+        (check_selection(X,meats) -> selected(X,meats); % If the input given is valid, then assert the fact
             write("wrong_selection"),nl),
-        query(meat);
-        true.
+        query(meat); % Loops until the given input is 0 
+        true. % Ends the loop if the input is 0
 
 query(veg) :-
     print("Please choose the vegetables you want one by one(0 to end):"),
@@ -248,19 +282,12 @@ display:-
     meal_type(Meal),
     write("Meal type selected: "), write(Meal), nl,
     write("Choices selected:"),nl,
-    findall(X, bread(X), Breads), atomic_list_concat(Breads, ',',Bread),
-    write("Bread selected:"),write(Bread),nl,
-    findall(X, meat(X), Meats), atomic_list_concat(Meats, ',',Meat),
-    write("Meats selected:"),write(Meat),nl,
-    findall(X, cheese(X), Cheeses), atomic_list_concat(Cheeses, ',',Cheese),
-    write("Cheese selected:"),write(Cheese),nl,
-    findall(X, veg(X), Vegs), atomic_list_concat(Vegs, ',',Veg),
-    write("Vegetables selected:"),write(Veg),nl,
-    findall(X, sauce(X), Sauces), atomic_list_concat(Sauces, ',',Sauce),
-    write("Sauces selected:"),write(Sauce),nl,
-    findall(X, side(X), Sides), atomic_list_concat(Sides, ',',Side),
-    write("Sides selected:"),write(Side),nl,
-    findall(X, salad(X), Salads), atomic_list_concat(Salads, ',',Salad),
-    write("Salads selected:"),write(Salad),nl,
-    findall(X, drink(X), Drinks), atomic_list_concat(Drinks, ',',Drink),
-    write("Drink selected:"),write(Drink),nl.
+    print_selected(breads),
+    print_selected(meats),
+    print_selected(cheeses),
+    print_selected(vegetables),
+    print_selected(sauces),
+    print_selected(sides),
+    print_selected(salads),
+    print_selected(drinks).
+
