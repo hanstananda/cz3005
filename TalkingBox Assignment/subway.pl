@@ -148,7 +148,7 @@ query(bread):- % Get the type of bread selected by the user
     options(breads),nl,
     read(X),
     check_selection(X,breads) -> selected(X,breads); % If the input given is valid, then assert the fact
-        write("wrong_selection"),nl, 
+        write("Your selection is not in the list! Please try again..."),nl, 
         query(bread). % The input is invalid, thus it loops back to query the user again
 
 query(cheese):- % Get the type of cheese selected by the user
@@ -156,7 +156,7 @@ query(cheese):- % Get the type of cheese selected by the user
     options(cheeses),nl,
     read(X),
     check_selection(X,cheeses) -> selected(X,cheeses);
-        write("wrong_selection"),nl,
+        write("Your selection is not in the list! Please try again..."),nl,
         query(cheese).
 
 query(drink):- % Get the type of drink selected by the user
@@ -164,7 +164,7 @@ query(drink):- % Get the type of drink selected by the user
     options(drinks),nl,
     read(X),
     check_selection(X,drinks) -> selected(X,drinks);
-        write("wrong_selection"),nl,
+        write("Your selection is not in the list! Please try again..."),nl,
         query(drink).
 
 query(meat):- % Get the type of meats selected by the user
@@ -173,67 +173,67 @@ query(meat):- % Get the type of meats selected by the user
     read(X),
     not(X==0) -> 
         (check_selection(X,meats) -> selected(X,meats); % If the input given is valid, then assert the fact
-            write("wrong_selection"),nl),
-        query(meat); % Loops until the given input is 0 
+            write("Your selection is not in the list! Please try again..."),nl), % Input is invalid, just inform the user
+        query(meat); % Loops back as long as the input is not 0, regardless whether the input is valid or invalid 
         true. % Ends the loop if the input is 0
 
-query(veg) :-
+query(veg) :- % Get the type of vegetables selected by the user
     print("Please choose the vegetables you want one by one(0 to end):"),
     options(vegs),nl,
     read(X),
     not(X==0) -> 
         ( check_selection(X, vegs) -> selected(X,vegs); 
-            write("wrong_selection"),nl ),      
+            write("Your selection is not in the list! Please try again..."),nl ),      
         query(veg);
         true.
 
-query(healthy_sauce):-
+query(healthy_sauce):- % Get the type of healthy sauces selected by the user
     print("Please choose the type of sauces you want one by one(0 to end):"),
     options(healthy_sauces),nl,
     read(X),
     not(X==0) -> 
-        ( check_selection(X,healthy_sauces) -> selected(X,sauces);
-            write("wrong_selection"),nl),
+        ( check_selection(X,healthy_sauces) -> selected(X,sauces); % The one that is asserted is sauce for simplification, since healthy sauces are a subset of sauces
+            write("Your selection is not in the list! Please try again..."),nl),
         query(healthy_sauce);
         true.
 
-query(vegan_sauce):-
+query(vegan_sauce):- % Get the type of vegan sauces selected by the user
     print("Please choose the type of sauces you want one by one(0 to end):"),
     options(vegan_sauces),nl,
     read(X),
     not(X==0) -> 
-        ( check_selection(X, vegan_sauces) -> selected(X,sauces); 
-            write("wrong_selection"),nl ),      
+        ( check_selection(X, vegan_sauces) -> selected(X,sauces); % The one that is asserted is sauce for simplification, since vegan sauces are a subset of sauces
+            write("Your selection is not in the list! Please try again..."),nl ),      
         query(vegan_sauce);
         true.
 
-query(sauce):-
+query(sauce):- % Get the type of sauces selected by the user
     print("Please choose the type of sauces you want one by one(0 to end):"),
     options(sauces),nl,
     read(X),
     not(X==0) -> 
         ( check_selection(X, sauces) -> selected(X,sauces); 
-            write("wrong_selection"),nl ),      
+            write("Your selection is not in the list! Please try again..."),nl ),      
         query(sauce);
         true.
 
-query(side):-
+query(side):- % Get the type of sides selected by the user
     print("Please choose the sides you want one by one(0 to end):"),
     options(sides),nl,
     read(X),
     not(X==0) -> 
         ( check_selection(X, sides) -> selected(X,sides); 
-            write("wrong_selection"),nl ),      
+            write("Your selection is not in the list! Please try again..."),nl ),      
         query(side);
         true.
 
-query(salad):-
+query(salad):- % Get the type of salads selected by the user
     print("Please choose the salads you want one by one(0 to end):"),
     options(salads),nl,
     read(X),
     not(X==0) -> 
         ( check_selection(X, salads) -> selected(X,salads); 
-            write("wrong_selection"),nl ),      
+            write("Your selection is not in the list! Please try again..."),nl ),      
         query(salad);
         true.
 
