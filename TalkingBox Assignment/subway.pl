@@ -254,7 +254,7 @@ meal(value) :- % Value meal will not query on sides and drinks
 meal(salad):- % Salad meal will only query salad options
     query(salad), query(side), query(drink).
 
-start_choose:- % Start the program
+start:- % Start the program
     preprint,
     write("Choose meal type:(normal, veggie, vegan, healthy, value, salad)"),nl,
     read(Type),
@@ -277,16 +277,17 @@ start_choose:- % Start the program
         write("meal type :"), write(Type),nl, 
         meal(salad), assert(meal_type(meal(salad)));
     write("invalid option selected!"),nl,
-    start_choose), % Loops back to query the user again about the type if it is not in the list
+    start), % Loops back to query the user again about the type if it is not in the list
     display,
     postprint,
     reset.
 
-display:- 
-    meal_type(Meal),
+display:- % Display all the selected facts
+    write("==========================================================="),nl,
+    meal_type(Meal), % Find the meal type and print it
     write("Meal type selected: "), write(Meal), nl,
     write("Choices selected:"),nl,
-    print_selected(breads),
+    print_selected(breads), % Calling all the respective print function above
     print_selected(meats),
     print_selected(cheeses),
     print_selected(vegetables),
@@ -295,22 +296,24 @@ display:-
     print_selected(salads),
     print_selected(drinks).
 
-preprint:-
+preprint:- % Welcome message
     write("==========================================================="),nl,
     write("==================== WELCOME TO SUBWAY ===================="),nl,
-    write("==========================================================="),nl,
+    write("==========================================================="),nl.
 
-postprint:-
-    write("==========================================================="),nl
+postprint:- % Ending message
+    write("==========================================================="),nl,
     write("======================== THANK YOU ========================"),nl,
-    write("==========================================================="),nl,
+    write("============== PLEASE COME AND USE ME AGAIN :D ============"),nl,
+    write("==========================================================="),nl.
 
-reset:- retractall(bread(_)).
-reset:- retractall(meat(_)).
-reset:- retractall(veg(_)).
-reset:- retractall(sauce(_)).
-reset:- retractall(salad(_)).
-reset:- retractall(cheese(_)).
-reset:- retractall(side(_)).
-reset:- retractall(drink(_)).
+% Reset is used to remove the assertion of the dynamic facts
+reset:- retractall(bread(_)),fail. % fail is used to force the travelsal continue after successfully deleting specific facts
+reset:- retractall(meat(_)),fail.
+reset:- retractall(veg(_)),fail.
+reset:- retractall(sauce(_)),fail.
+reset:- retractall(salad(_)),fail.
+reset:- retractall(cheese(_)),fail.
+reset:- retractall(side(_)),fail.
+reset:- retractall(drink(_)),fail.
 reset:- retractall(meal_type(_)).
